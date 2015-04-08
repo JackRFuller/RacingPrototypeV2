@@ -43,6 +43,10 @@ public class GameModeManager : MonoBehaviour {
 	public GameObject[] CoreCheckpoints;
 	private int CheckpointId = 0;
 
+	//PositionVariables
+	public int NumberofCars;
+	public int CurrentPosition;
+
 
 	// Use this for initialization
 	void Start () {
@@ -61,7 +65,12 @@ public class GameModeManager : MonoBehaviour {
 		Checkpoints = GameObject.FindGameObjectsWithTag ("Checkpoint");
 		MaxNumofCheckpoints = Checkpoints.Length;
 
-		CoreCheckpoints [CheckpointId].renderer.enabled = true;
+		if(ActiveGameMode == GameMode.CheckpointSprint)
+		{
+			CoreCheckpoints [CheckpointId].renderer.enabled = true;
+		}
+
+
 	
 	}
 	
@@ -170,11 +179,35 @@ public class GameModeManager : MonoBehaviour {
 				GameModeBegun = false;
 				BackgroundImage.enabled = true;
 				FinishingMessage.enabled = true;
-				if(ActiveGameMode != GameMode.CheckpointSprint)
+				if(ActiveGameMode == GameMode.TimeTrial)
 				{
 					FinalTime.text = "You finished in " + FinalTimeText;
 				}
-				else
+
+				if(ActiveGameMode == GameMode.Race)
+				{
+					string FinalPosition = "1st";
+
+					if(CurrentPosition == NumberofCars)
+					{
+						FinalPosition = "Last";
+					}
+					else
+					{
+						if(CurrentPosition == 2)
+						{
+							FinalPosition = "2nd";
+						}
+						if(CurrentPosition == 3)
+						{
+							FinalPosition = "3rd";
+						}
+					}
+
+					FinalTime.text = "You Finished " + FinalPosition;
+				}
+
+				if(ActiveGameMode == GameMode.CheckpointSprint)
 				{
 					FinalTime.text = "You finished with " + FinalTimeText + " to spare";
 				}
